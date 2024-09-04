@@ -69,6 +69,6 @@ You can pass additional parameters to set the icon size and anchor
 ```
 ->markerIcon('/images/marker-icon.png',[100,100],[50,50])
 ```
-![image](images/custom-marp-marker.png)
+![image](images/custom-map-marker.png)
 
 
