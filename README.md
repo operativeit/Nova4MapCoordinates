@@ -1,6 +1,6 @@
-![](https://img.shields.io/github/stars/iMuMz/Nova4CardMap?&style=flat-square)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/imumz/Nova4CardMap?color=red&style=flat-square)
-![Packagist](https://img.shields.io/packagist/dt/imumz/nova-4-card-map?color=green&logo=testing&style=flat-square)
+![](https://img.shields.io/github/stars/iMuMz/Nova4MapCoordinates?&style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/imumz/Nova4MapCoordinates?color=red&style=flat-square)
+![Packagist](https://img.shields.io/packagist/dt/imumz/nova-4-map-coordinates?color=green&logo=testing&style=flat-square)
 # Nova4MapCoordinates
 Custom [Laravel Nova 4](https://nova.laravel.com/) form field for create and update using [Leaflet](https://leafletjs.com/) to retrieve coordinates from a marker. Supports Search, Google Maps, map height, marker popup and custom marker icons.
 
@@ -69,6 +69,6 @@ You can pass additional parameters to set the icon size and anchor
 ```
 ->markerIcon('/images/marker-icon.png',[100,100],[50,50])
 ```
-![image](images/custom-markers-dashboard-example.png)
+![image](images/custom-marp-marker.png)
 
 
