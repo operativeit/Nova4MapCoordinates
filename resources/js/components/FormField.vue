@@ -153,11 +153,17 @@ export default {
     let marker = null;
     var self = this;
     // Tile Layers
-    var googleMaps
+    var googleMaps = L.tileLayer()
     var osm
     var defaultTileProvider = this.field.defaultTileProvider || 'openstreetmap'
     var defaultLat = this.field.defaultLatitude || '-33.950195282757'
     var defaultLng = this.field.defaultLongitude|| '18.429565429687504'
+
+    // Map
+    var map = L.map('map', {
+      //center: this.defaultLocation,
+      //layers: [osm]
+    });
 
     // OpenStreetMap
     osm = L.tileLayer(
@@ -181,12 +187,6 @@ export default {
 
     }
 
-    // Map
-    var map = L.map('map', {
-      //center: this.defaultLocation,
-      //layers: [osm]
-    });
-
     // Map Search Provider
     const searchControl = new LS.GeoSearchControl({
       showMarker: false,
@@ -199,8 +199,14 @@ export default {
     // Layer control
     var baseMaps = {
       "OpenStreetMap": osm,
-      "Google": googleMaps
     };
+
+    if (this.field.googleApiKey && this.field.googleMapType) {
+      baseMaps = {
+        "OpenStreetMap": osm,
+        "Google": googleMaps
+      }
+    }
 
     // Default Tile Provider
     switch (defaultTileProvider) {
@@ -217,14 +223,20 @@ export default {
     }
 
     L.control.layers(baseMaps, null, {
-      position: "topright",
+      position: "bottomleft",
     }).addTo(map);
 
+    var onUpdateCoordinates = [];
+    if (this.field.latitude && this.field.longitude) {
+      onUpdateCoordinates = [
+        document.querySelector("input[dusk='" + this.field.latitude + "']").value || defaultLat,
+        document.querySelector("input[dusk='" + this.field.longitude + "']").value || defaultLng
+      ]
+    } else {
+      onUpdateCoordinates = this.defaultLocation
+    }
 
-    let lat = document.querySelector("input[dusk='" + this.field.latitude + "']").value || defaultLat;
-    let lng = document.querySelector("input[dusk='" + this.field.longitude + "']").value || defaultLng;
-
-    marker = L.marker(L.latLng(lat, lng))
+    marker = L.marker(L.latLng(onUpdateCoordinates))
       .addTo(map)
       .on('click', function (e) {
         marker.bindPopup('Latitude: ' + e.latlng.lat + '<br> Longitude: ' + e.latlng.lng).openPopup();
