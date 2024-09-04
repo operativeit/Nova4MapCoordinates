@@ -3,6 +3,7 @@
 namespace Imumz\Nova4MapCoordinates;
 
 use Laravel\Nova\Fields\Field;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Nova4MapCoordinates extends Field
 {
@@ -29,7 +30,7 @@ class Nova4MapCoordinates extends Field
         ]);
     }
 
-    public function searchProvider(string $provider) {
+    /*public function searchProvider(string $provider) {
         return $this->withMeta([
             'searchProvider' => $provider
         ]);
@@ -39,7 +40,7 @@ class Nova4MapCoordinates extends Field
         return $this->withMeta([
             'searchProviderKey' => $providerKey
         ]);
-    }
+    }*/
 
     public function googleApiKey($googleApiKey) {
         return $this->withMeta([
@@ -68,6 +69,18 @@ class Nova4MapCoordinates extends Field
     public function defaultTileProvider(string $defaultTileProvider) {
         return $this->withMeta([
             'defaultTileProvider' => $defaultTileProvider
+        ]);
+    }
+
+    public function latitude($latitude) {
+        return $this->withMeta([
+            'latitude' => $latitude,
+        ]);
+    }
+
+    public function longitude(string $longitude) {
+        return $this->withMeta([
+            'longitude' => $longitude,
         ]);
     }
 }

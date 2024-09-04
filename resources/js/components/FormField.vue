@@ -1,12 +1,10 @@
 <template>
 
-  <div id="map" :style="'height:' + this.height"></div>
-
   <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText" :full-width-content="fullWidthContent">
     <template #field>
-      <input :id="field.attribute" type="text" class="w-full form-control form-input form-control-bordered"
-        :class="errorClasses" :placeholder="field.name" v-model="value" />
-
+      <!--<input :id="field.attribute" type="text" class="w-full form-control form-input form-control-bordered"
+        :class="errorClasses" :placeholder="field.name" v-model="value" />-->
+      <div id="map" :style="'height:' + this.height"></div>
     </template>
   </DefaultField>
 
@@ -18,6 +16,8 @@ import { FormField, HandlesValidationErrors } from 'laravel-nova'
 import "leaflet/dist/leaflet.css";
 import * as L from "leaflet";
 import * as LS from 'leaflet-geosearch';
+import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
+import 'leaflet-control-geocoder/dist/Control.Geocoder.js';
 import "leaflet-geosearch/assets/css/leaflet.css";
 import "leaflet.gridlayer.googlemutant";
 import $Scriptjs from "scriptjs";
@@ -32,15 +32,42 @@ export default {
      * Set the initial, internal value for the field.
      */
     setInitialValue() {
+
+      let value = this.value || this.field.value;
+      if (value) {
+        this.setValue(value.latitude, value.longitude);
+      }
       this.value = this.field.value || ''
     },
 
+    setValue(latitude, longitude) {
+
+      //this.value = (latitude || 0) + ',' + (longitude || 0)
+      this.value = '{"latitude":'
+        + (latitude || 0)
+        + ',"longitude":'
+        + (longitude || 0)
+        + '}';
+    },
+
+    /*
+     * Update the field's internal value.
+     */
+    handleChange(value) {
+      this.setValue(value.latitude, value.longitude);
+    },
     /**
      * Fill the given FormData object with the field's internal value.
      */
     fill(formData) {
-      formData.append(this.fieldAttribute, this.value || '')
+
+      let value = JSON.parse(this.value || this.field.value);
+
+      //formData.append(this.fieldAttribute, this.value || '')
+      formData.append(this.field.latitude, value.latitude || '');
+      formData.append(this.field.longitude, value.longitude || '');
     },
+
   },
   data() {
 
@@ -48,6 +75,8 @@ export default {
     let tileProviders = {}
     let defaultLocation = [-33.950195282757, 18.429565429687504];
     let searchProvider = new LS.EsriProvider();
+    var latitude
+    var longitude
 
     // Default location
     if (this.field.defaultLatitude && this.field.defaultLongitude) {
@@ -114,34 +143,33 @@ export default {
       tileProviders,
       height,
       defaultLocation,
-      searchProvider
+      searchProvider,
+      latitude,
+      longitude
     };
   },
 
   mounted() {
     let marker = null;
-    var map = L.map('map').setView(this.defaultLocation, 8);
+    var self = this;
+    // Tile Layers
     var googleMaps
     var osm
-
-    // Map Search Provider
-    const searchControl = new LS.GeoSearchControl({
-      showMarker: false,
-      provider: this.searchProvider,
-      style: 'bar',
-    });
-    map.addControl(searchControl);
+    var defaultTileProvider = this.field.defaultTileProvider || 'openstreetmap'
+    var defaultLat = this.field.defaultLatitude || '-33.950195282757'
+    var defaultLng = this.field.defaultLongitude|| '18.429565429687504'
 
     // OpenStreetMap
     osm = L.tileLayer(
       "https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map);
+    });
     this.tileProviders["OpenStreetMap"] = osm
 
     // Google
     if (this.field.googleApiKey && this.field.googleMapType) {
       googleMaps = L.gridLayer.googleMutant({
+        maxZoom: 24,
         type: this.field.googleMapType, // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
       });
       this.tileProviders["Google"] = googleMaps
@@ -150,10 +178,32 @@ export default {
         this.field.googleApiKey +
         "&loading=async"
       );
+
     }
 
+    // Map
+    var map = L.map('map', {
+      //center: this.defaultLocation,
+      //layers: [osm]
+    });
+
+    // Map Search Provider
+    const searchControl = new LS.GeoSearchControl({
+      showMarker: false,
+      provider: this.searchProvider,
+      style: 'bar',
+      searchLabel: 'Search for a location',
+    });
+    map.addControl(searchControl);
+
+    // Layer control
+    var baseMaps = {
+      "OpenStreetMap": osm,
+      "Google": googleMaps
+    };
+
     // Default Tile Provider
-    switch (this.field.defaultTileProvider) {
+    switch (defaultTileProvider) {
       case "google":
         if (this.field.googleApiKey && this.field.googleMapType) {
           map.removeLayer(osm);
@@ -166,24 +216,36 @@ export default {
         break;
     }
 
-    // Layer control
-    var layerControl = L.control.layers(this.tileProviders, null, {
+    L.control.layers(baseMaps, null, {
       position: "topright",
     }).addTo(map);
+
+
+    let lat = document.querySelector("input[dusk='" + this.field.latitude + "']").value || defaultLat;
+    let lng = document.querySelector("input[dusk='" + this.field.longitude + "']").value || defaultLng;
+
+    marker = L.marker(L.latLng(lat, lng))
+      .addTo(map)
+      .on('click', function (e) {
+        marker.bindPopup('Latitude: ' + e.latlng.lat + '<br> Longitude: ' + e.latlng.lng).openPopup();
+      });
+    var latLngs = [marker.getLatLng()];
+    var markerBounds = L.latLngBounds(latLngs);
+    map.fitBounds(markerBounds);
 
     map.on('click', function (e) {
 
       if (marker !== null) {
         map.removeLayer(marker);
       }
-      marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-      /*var popLocation = e.latlng;
-      L.popup()
-      .setLatLng(popLocation)
-      .setContent('Latitude: ' + e.latlng.lat + '<br> Longitude: ' + e.latlng.lng)
-      .openOn(map);*/
+      marker = L.marker([e.latlng.lat, e.latlng.lng])
+        .addTo(map)
+        .on('click', function (e) {
+          marker.bindPopup('Latitude: ' + e.latlng.lat + '<br> Longitude: ' + e.latlng.lng).openPopup();
+        });
 
-      document.getElementById("map_view").value = e.latlng.lat + ',' + e.latlng.lng
+      self.setValue(e.latlng.lat, e.latlng.lng);
+
     });
 
   },

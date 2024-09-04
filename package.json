@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "leaflet": "^1.9.4",
+    "leaflet-control-geocoder": "^1.8.3",
     "leaflet-geosearch": "^4.0.0",
     "leaflet.gridlayer.googlemutant": "^0.14.1",
     "scriptjs": "^2.5.9"
