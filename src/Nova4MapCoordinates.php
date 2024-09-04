@@ -14,7 +14,8 @@ class Nova4MapCoordinates extends Field
      */
     public $component = 'nova-4-map-coordinates';
     public $showOnUpdate = true;
-    public $showOnIndex = true;
+    public $showOnIndex = false;
+    public $showOnDetail = false;
 
     public function height($height) {
         return $this->withMeta([

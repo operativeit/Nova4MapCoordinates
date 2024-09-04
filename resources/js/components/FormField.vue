@@ -223,7 +223,7 @@ export default {
     }
 
     L.control.layers(baseMaps, null, {
-      position: "bottomleft",
+      position: "bottomright",
     }).addTo(map);
 
     var onUpdateCoordinates = [];
