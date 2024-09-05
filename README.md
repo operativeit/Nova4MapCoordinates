@@ -48,6 +48,12 @@ Nova4MapCoordinates::make('Map View')
 ->defaultLatitude()
 ->defaultLongitude()
 ```
+#### Zoom
+Set the zoom level. Default is 8.
+```
+Nova4MapCoordinates::make('Map View')
+->zoom(12)
+```
 #### Field Names 
 Setting the latitude and longitude results from the map marker.
 ```
