@@ -63,9 +63,10 @@ export default {
 
       let value = JSON.parse(this.value || this.field.value);
 
-      //formData.append(this.fieldAttribute, this.value || '')
-      formData.append(this.field.latitude, value.latitude || '');
-      formData.append(this.field.longitude, value.longitude || '');
+      if (value) {
+        formData.append(this.field.latitude, value.latitude || '');
+        formData.append(this.field.longitude, value.longitude || '');
+      }
     },
 
   },
