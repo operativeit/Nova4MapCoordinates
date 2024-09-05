@@ -2,8 +2,6 @@
 
   <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText" :full-width-content="fullWidthContent">
     <template #field>
-      <!--<input :id="field.attribute" type="text" class="w-full form-control form-input form-control-bordered"
-        :class="errorClasses" :placeholder="field.name" v-model="value" />-->
       <div id="map" :style="'height:' + this.height"></div>
     </template>
   </DefaultField>
@@ -154,7 +152,7 @@ export default {
     let marker = null;
     var self = this;
     // Tile Layers
-    var googleMaps = L.tileLayer()
+    var googleMaps = L.gridLayer.googleMutant()
     var osm
     var defaultTileProvider = this.field.defaultTileProvider || 'openstreetmap'
     var defaultLat = this.field.defaultLatitude || '-33.950195282757'
@@ -197,27 +195,21 @@ export default {
     });
     map.addControl(searchControl);
 
-    // Layer control
-    var baseMaps = {
-      "OpenStreetMap": osm,
-    };
-
-    if (this.field.googleApiKey && this.field.googleMapType) {
-      baseMaps = {
-        "OpenStreetMap": osm,
-        "Google": googleMaps
-      }
-    }
-
     // Default Tile Provider
     switch (defaultTileProvider) {
       case "google":
         if (this.field.googleApiKey && this.field.googleMapType) {
+          var baseMaps = {
+            "Google": googleMaps,
+          }
           map.removeLayer(osm);
           googleMaps.addTo(map);
         }
         break;
       case "openstreetmap":
+        var baseMaps = {
+          "OpenStreetMap": osm,
+        };
         map.removeLayer(googleMaps);
         osm.addTo(map);
         break;
