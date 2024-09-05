@@ -2,7 +2,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/imumz/Nova4MapCoordinates?color=red&style=flat-square)
 ![Packagist](https://img.shields.io/packagist/dt/imumz/nova-4-map-coordinates?color=green&logo=testing&style=flat-square)
 # Nova4MapCoordinates
-Custom [Laravel Nova 4](https://nova.laravel.com/) form field for create and update using [Leaflet](https://leafletjs.com/) to retrieve coordinates from a marker. Supports Search, Google Maps, map height, marker popup and custom marker icons.
+Custom [Laravel Nova 4](https://nova.laravel.com/) form field for create and update using [Leaflet](https://leafletjs.com/) to retrieve coordinates from a clickable map marker. Supports Search, Google Maps, map height, marker popup and custom marker icons.
 
 ![image](images/marker-update-example.png)
 
