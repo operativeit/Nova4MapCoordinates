@@ -157,11 +157,10 @@ export default {
     var defaultTileProvider = this.field.defaultTileProvider || 'openstreetmap'
     var defaultLat = this.field.defaultLatitude || '-33.950195282757'
     var defaultLng = this.field.defaultLongitude|| '18.429565429687504'
+    var zoom = this.field.zoom || 8
 
     // Map
     var map = L.map('map', {
-      //center: this.defaultLocation,
-      //layers: [osm]
     });
 
     // OpenStreetMap
@@ -234,9 +233,7 @@ export default {
       .on('click', function (e) {
         marker.bindPopup('Latitude: ' + e.latlng.lat + '<br> Longitude: ' + e.latlng.lng).openPopup();
       });
-    var latLngs = [marker.getLatLng()];
-    var markerBounds = L.latLngBounds(latLngs);
-    map.fitBounds(markerBounds);
+    map.setView(L.latLng(onUpdateCoordinates), zoom);
 
     map.on('click', function (e) {
 

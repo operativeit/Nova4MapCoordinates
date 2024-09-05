@@ -84,4 +84,10 @@ class Nova4MapCoordinates extends Field
             'longitude' => $longitude,
         ]);
     }
+
+    public function zoom(int $zoom) {
+        return $this->withMeta([
+            'zoom' => $zoom,
+        ]);
+    }
 }
