@@ -2,6 +2,8 @@
 
   <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText" :full-width-content="fullWidthContent">
     <template #field>
+      <input :id="field.attribute" type="text" class="w-full form-control form-input form-control-bordered"
+        :class="errorClasses" :placeholder="field.name" v-model="value" />
       <div id="map" :style="'height:' + this.height"></div>
     </template>
   </DefaultField>
@@ -30,41 +32,31 @@ export default {
      * Set the initial, internal value for the field.
      */
     setInitialValue() {
-
-      let value = this.value || this.field.value;
-      if (value) {
-        this.setValue(value.latitude, value.longitude);
-      }
       this.value = this.field.value || ''
     },
 
     setValue(latitude, longitude) {
 
-      //this.value = (latitude || 0) + ',' + (longitude || 0)
-      this.value = '{"latitude":'
+      this.value = (latitude || 0) + ',' + (longitude || 0)
+      /*this.value = '{"latitude":'
         + (latitude || 0)
         + ',"longitude":'
         + (longitude || 0)
-        + '}';
+        + '}';*/
     },
 
     /*
      * Update the field's internal value.
      */
     handleChange(value) {
-      this.setValue(value.latitude, value.longitude);
+      this.setValue(value.latitude, value.longitude)
     },
     /**
      * Fill the given FormData object with the field's internal value.
      */
     fill(formData) {
 
-      let value = JSON.parse(this.value || this.field.value);
-
-      if (value) {
-        formData.append(this.field.latitude, value.latitude || '');
-        formData.append(this.field.longitude, value.longitude || '');
-      }
+      formData.append(this.fieldAttribute, this.value || '')
     },
 
   },
@@ -76,6 +68,7 @@ export default {
     let searchProvider = new LS.EsriProvider();
     var latitude
     var longitude
+    var onUpdateCoordinates = this.field.value.split(',') || defaultLocation
 
     // Default location
     if (this.field.defaultLatitude && this.field.defaultLongitude) {
@@ -143,12 +136,12 @@ export default {
       height,
       defaultLocation,
       searchProvider,
-      latitude,
-      longitude
+      onUpdateCoordinates
     };
   },
 
   mounted() {
+  
     let marker = null;
     var self = this;
     // Tile Layers
@@ -218,22 +211,12 @@ export default {
       position: "bottomright",
     }).addTo(map);
 
-    var onUpdateCoordinates = [];
-    if (this.field.latitude && this.field.longitude) {
-      onUpdateCoordinates = [
-        document.querySelector("input[dusk='" + this.field.latitude + "']").value || defaultLat,
-        document.querySelector("input[dusk='" + this.field.longitude + "']").value || defaultLng
-      ]
-    } else {
-      onUpdateCoordinates = this.defaultLocation
-    }
-
-    marker = L.marker(L.latLng(onUpdateCoordinates))
+    marker = L.marker(L.latLng(this.onUpdateCoordinates))
       .addTo(map)
       .on('click', function (e) {
         marker.bindPopup('Latitude: ' + e.latlng.lat + '<br> Longitude: ' + e.latlng.lng).openPopup();
       });
-    map.setView(L.latLng(onUpdateCoordinates), zoom);
+    map.setView( L.latLng(this.onUpdateCoordinates), zoom);
 
     map.on('click', function (e) {
 

@@ -73,18 +73,6 @@ class Nova4MapCoordinates extends Field
         ]);
     }
 
-    public function latitude($latitude) {
-        return $this->withMeta([
-            'latitude' => $latitude,
-        ]);
-    }
-
-    public function longitude(string $longitude) {
-        return $this->withMeta([
-            'longitude' => $longitude,
-        ]);
-    }
-
     public function zoom(int $zoom) {
         return $this->withMeta([
             'zoom' => $zoom,
