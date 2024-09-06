@@ -16,14 +16,14 @@ composer require imumz/nova-4-map-coordinates
 ```
 use Imumz\Nova4MapCoordinates\Nova4MapCoordinates
 ...
-Nova4MapCoordinates::make('Map View')
+Nova4MapCoordinates::make('Coordinates')
 
 ```
 ### Available Methods
 
 #### Height
 ```
-Nova4MapCoordinates::make('Map View')
+Nova4MapCoordinates::make('Coordinates')
 ->height('400px') // default is 300px
 ```
 #### Google Maps
@@ -33,33 +33,26 @@ Nova4MapCoordinates::make('Map View')
 By default the provider is OpenStreetMaps.<br> 
 You must set your Google Maps API key (https://developers.google.com/maps/documentation/javascript/get-api-key).
 ```
-Nova4MapCoordinates::make('Map View')
+Nova4MapCoordinates::make('Coordinates')
 ->googleApiKey('')
 ->googleMapType('roadmap'), // roadmap, satellite or hybrid
 ```
 #### Default Tile Provider
 ```
-Nova4MapCoordinates::make('Map View')
+Nova4MapCoordinates::make('Coordinates')
 ->defaultTileProvider('google') // google, openstreetmap
 ```
 #### Default Latitude and Longitude
 ```
-Nova4MapCoordinates::make('Map View')
+Nova4MapCoordinates::make('Coordinates')
 ->defaultLatitude()
 ->defaultLongitude()
 ```
 #### Zoom
 Set the zoom level. Default is 8.
 ```
-Nova4MapCoordinates::make('Map View')
+Nova4MapCoordinates::make('Coordinates')
 ->zoom(12)
-```
-#### Field Names 
-Setting the latitude and longitude results from the map marker.
-```
-Nova4MapCoordinates::make('Map View')
-->latitude('my_latitude_field_name')
-->longitude('my_longitude_field_name')
 ```
 #### Search 
 The search provider is a work in progress. Default is ESRI.
@@ -68,7 +61,7 @@ The search provider is a work in progress. Default is ESRI.
 
 #### Custom Marker Icon
 ```
-Nova4MapCoordinates::make('Map View')
+Nova4MapCoordinates::make('Coordinates')
 ->markerIcon('/images/marker-icon.png')
 ```
 You can pass additional parameters to set the icon size and anchor
