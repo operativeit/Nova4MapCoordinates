@@ -16,11 +16,12 @@ import { FormField, HandlesValidationErrors } from 'laravel-nova'
 import "leaflet/dist/leaflet.css";
 import * as L from "leaflet";
 import * as LS from 'leaflet-geosearch';
-import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
-import 'leaflet-control-geocoder/dist/Control.Geocoder.js';
 import "leaflet-geosearch/assets/css/leaflet.css";
 import "leaflet.gridlayer.googlemutant";
 import $Scriptjs from "scriptjs";
+import "leaflet.markercluster";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 export default {
   mixins: [FormField, HandlesValidationErrors],
@@ -38,11 +39,6 @@ export default {
     setValue(latitude, longitude) {
 
       this.value = (latitude || 0) + ',' + (longitude || 0)
-      /*this.value = '{"latitude":'
-        + (latitude || 0)
-        + ',"longitude":'
-        + (longitude || 0)
-        + '}';*/
     },
 
     /*
@@ -66,8 +62,6 @@ export default {
     let tileProviders = {}
     let defaultLocation = [-33.950195282757, 18.429565429687504];
     let searchProvider = new LS.EsriProvider();
-    var latitude
-    var longitude
     var onUpdateCoordinates = this.field.value.split(',') || defaultLocation
 
     // Default location
@@ -148,8 +142,6 @@ export default {
     var googleMaps = L.gridLayer.googleMutant()
     var osm
     var defaultTileProvider = this.field.defaultTileProvider || 'openstreetmap'
-    var defaultLat = this.field.defaultLatitude || '-33.950195282757'
-    var defaultLng = this.field.defaultLongitude|| '18.429565429687504'
     var zoom = this.field.zoom || 8
 
     // Map

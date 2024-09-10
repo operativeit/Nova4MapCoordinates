@@ -11,6 +11,7 @@
     "nova:install": "npm --prefix='../../vendor/laravel/nova' ci"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.12",
     "@vue/compiler-sfc": "^3.2.22",
     "form-backend-validation": "^2.3.3",
     "laravel-mix": "^6.0.41",
@@ -20,9 +21,9 @@
   },
   "dependencies": {
     "leaflet": "^1.9.4",
-    "leaflet-control-geocoder": "^1.8.3",
     "leaflet-geosearch": "^4.0.0",
     "leaflet.gridlayer.googlemutant": "^0.14.1",
+    "leaflet.markercluster": "^1.5.3",
     "scriptjs": "^2.5.9"
   }
 }
