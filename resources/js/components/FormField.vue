@@ -62,7 +62,8 @@ export default {
     let tileProviders = {}
     let defaultLocation = [-33.950195282757, 18.429565429687504];
     let searchProvider = new LS.EsriProvider();
-    var onUpdateCoordinates = this.field.value.split(',') || defaultLocation
+    var onUpdateCoordinates = defaultLocation
+    if (this.field.value) onUpdateCoordinates = this.field.value.split(',')
 
     // Default location
     if (this.field.defaultLatitude && this.field.defaultLongitude) {
