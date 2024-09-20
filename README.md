@@ -59,6 +59,20 @@ The search provider is a work in progress. Default is ESRI.
 
 ![image](images/search-example.png)
 
+### Search Provider Options
+You can pass additional parameters to the ```searchProviderOptions``` method
+```
+Nova4MapCoordinates::make('Coordinates')
+->searchProviderOptions([
+  'sourceCountry' => 'ZA',
+])
+```
+### Show / Hide Coordinates Field
+The coordinates input field can be hidden
+```
+Nova4MapCoordinates::make('Coordinates')
+->showMapCoordinates(false)
+```
 #### Custom Marker Icon
 ```
 Nova4MapCoordinates::make('Coordinates')
