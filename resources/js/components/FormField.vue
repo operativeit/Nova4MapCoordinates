@@ -3,7 +3,7 @@
   <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText" :full-width-content="fullWidthContent">
     <template #field>
       <input :id="field.attribute" type="text" class="w-full form-control form-input form-control-bordered"
-        :class="errorClasses" :placeholder="field.name" v-model="value" />
+        :class="errorClasses" :placeholder="field.name" v-model="value" v-show="this.showMapCoordinates" />
       <div id="map" :style="'height:' + this.height"></div>
     </template>
   </DefaultField>
@@ -59,9 +59,14 @@ export default {
   data() {
 
     var height
+    var showMapCoordinates = this.field.showMapCoordinates ?? true
     let tileProviders = {}
+    let providerOptions = {}
+    if (this.field.providerOptions) providerOptions = this.field.providerOptions
     let defaultLocation = [-33.950195282757, 18.429565429687504];
-    let searchProvider = new LS.EsriProvider();
+    let searchProvider = new LS.EsriProvider({
+          params: providerOptions
+    });
     var onUpdateCoordinates = defaultLocation
     if (this.field.value) onUpdateCoordinates = this.field.value.split(',')
 
@@ -131,7 +136,8 @@ export default {
       height,
       defaultLocation,
       searchProvider,
-      onUpdateCoordinates
+      onUpdateCoordinates,
+      showMapCoordinates
     };
   },
 

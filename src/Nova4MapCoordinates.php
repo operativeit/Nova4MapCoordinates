@@ -78,4 +78,16 @@ class Nova4MapCoordinates extends Field
             'zoom' => $zoom,
         ]);
     }
+
+    public function searchProviderOptions(array $options) {
+        return $this->withMeta([
+            'providerOptions' => $options
+        ]);
+    }
+
+    public function showMapCoordinates(bool $show) {
+        return $this->withMeta([
+            'showMapCoordinates' => $show
+        ]);
+    }
 }
