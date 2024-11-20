@@ -67,12 +67,13 @@ export default {
     let searchProvider = new LS.EsriProvider({
           params: providerOptions
     });
-    var onUpdateCoordinates = defaultLocation
-    if (this.field.value) onUpdateCoordinates = this.field.value.split(',')
-
-    // Default location
-    if (this.field.defaultLatitude && this.field.defaultLongitude) {
-      defaultLocation = [this.field.defaultLatitude, this.field.defaultLongitude];
+    var onUpdateCoordinates;
+    if (this.field.value) { 
+      onUpdateCoordinates = this.field.value.split(',')
+    } else if (this.field.defaultLatitude && this.field.defaultLongitude) {
+      onUpdateCoordinates = [this.field.defaultLatitude, this.field.defaultLongitude];
+    } else {
+      onUpdateCoordinates = defaultLocation;
     }
 
     // Search Providers
