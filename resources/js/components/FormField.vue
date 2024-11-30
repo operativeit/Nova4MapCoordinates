@@ -233,6 +233,9 @@ export default {
 
     });
 
+    Nova.$on('nova-tabs-changed', (panel, tab) => {
+      this.$nextTick(() => map.invalidateSize())
+    })
   },
 }
 </script>
