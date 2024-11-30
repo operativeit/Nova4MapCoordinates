@@ -29,6 +29,10 @@ export default {
   props: ['resourceName', 'resourceId', 'field'],
 
   methods: {
+    handleResize() {
+	console.log('resize');
+    },
+
     /*
      * Set the initial, internal value for the field.
      */
@@ -233,7 +237,10 @@ export default {
 
     });
 
-  },
+    Nova.$on('nova-tabs-changed', (panel, tab) => {
+      this.$nextTick(() => map.invalidateSize())
+    })
+  }
 }
 </script>
 <style>
