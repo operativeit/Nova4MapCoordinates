@@ -90,4 +90,13 @@ class Nova4MapCoordinates extends Field
             'showMapCoordinates' => $show
         ]);
     }
+
+    public function wms(string $url, array $layers, array $options = null) {
+        return $this->withMeta([
+            'wmsUrl' => $url,
+            'wmsLayers' => $layers,
+            'wmsOptions' => $options
+        ]);
+    }
+
 }

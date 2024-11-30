@@ -215,6 +215,21 @@ export default {
       position: "bottomright",
     }).addTo(map);
 
+    if (this.field.wmsUrl && Array.isArray(this.field.wmsLayers) && this.field.wmsLayers.length > 0) {
+
+      const wmsOptions = {
+        layers: this.field.wmsLayers.join(','),
+        transparent: true,
+        format: 'image/png',
+      };
+ 
+      const wmsUrl = this.field.wmsUrl;
+      console.log(wmsUrl, wmsOptions);
+  
+      const wmsLayer = L.tileLayer.wms(wmsUrl, wmsOptions).addTo(map);
+    }
+
+
     marker = L.marker(L.latLng(this.onUpdateCoordinates))
       .addTo(map)
       .on('click', function (e) {
